@@ -1,6 +1,8 @@
 var KEYS = ['c', 'd', 'e', 'f'];
 var NOTE_DURATION = 1000;
 
+var entered = [];
+
 // NoteBox
 //
 // Acts as an interface to the coloured note boxes on the page, exposing methods
@@ -21,7 +23,7 @@ function NoteBox(key, onClick) {
 
 	this.key = key;
 	this.onClick = onClick || function () {};
-console.log('this:', this);
+
 	// Plays the audio associated with this NoteBox
 	this.play = function () {
 		playing++;
@@ -32,7 +34,7 @@ console.log('this:', this);
 		// Set active class for NOTE_DURATION time
 		boxEl.classList.add('active');
 		setTimeout(function () {
-			playing--
+			playing--;
 			if (!playing) {
 				boxEl.classList.remove('active');
 			}
@@ -52,9 +54,9 @@ console.log('this:', this);
 	// Call this NoteBox's clickHandler and play the note.
 	this.clickHandler = function () {
 		if (!enabled) return;
-
-		this.onClick(this.key)
-		this.play()
+		this.onClick(this.key);
+		this.play();
+		entered.push(this.key);
 	}.bind(this)
 
 	boxEl.addEventListener('mousedown', this.clickHandler);
@@ -76,10 +78,12 @@ KEYS.forEach(function (key) {
 // });
 
 // =========================================================================
+var played = [];
 
 function onBeginGameClick() {
-  console.log('onBeginGameClick clicked!');
+  // console.log('onBeginGameClick clicked!');
 	var randomIndex = getRandomInt(0, 4);
+	played.push(KEYS[randomIndex]);
 	new NoteBox(KEYS[randomIndex]).play();
 }
 
@@ -87,4 +91,8 @@ function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
+
+function isSequenceCorrect(played, entered) {
+	return JSON.stringify(played) === JSON.stringify(entered);
 }
