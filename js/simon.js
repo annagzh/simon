@@ -21,7 +21,7 @@ function NoteBox(key, onClick) {
 
 	this.key = key;
 	this.onClick = onClick || function () {};
-
+console.log('this:', this);
 	// Plays the audio associated with this NoteBox
 	this.play = function () {
 		playing++;
@@ -71,8 +71,20 @@ KEYS.forEach(function (key) {
 	notes[key] = new NoteBox(key);
 });
 
-KEYS.concat(KEYS.slice().reverse()).forEach(function(key, i) {
-	setTimeout(notes[key].play.bind(null, key), i * NOTE_DURATION);
-});
+// KEYS.concat(KEYS.slice().reverse()).forEach(function(key, i) {
+// 	setTimeout(notes[key].play.bind(null, key), i * NOTE_DURATION);
+// });
 
-// export { NoteBox };
+// =========================================================================
+
+function onBeginGameClick() {
+  console.log('onBeginGameClick clicked!');
+	var randomIndex = getRandomInt(0, 4);
+	new NoteBox(KEYS[randomIndex]).play();
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
