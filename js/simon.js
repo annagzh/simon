@@ -74,3 +74,5 @@ KEYS.forEach(function (key) {
 KEYS.concat(KEYS.slice().reverse()).forEach(function(key, i) {
 	setTimeout(notes[key].play.bind(null, key), i * NOTE_DURATION);
 });
+
+// export { NoteBox };
